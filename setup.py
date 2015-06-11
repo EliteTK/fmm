@@ -167,6 +167,9 @@ def feeds(users, subscriptions, feedconf):
 def save_feed_states(feeds):
     print('Saving feed states')
 
+    if not os.path.exists('feeds'):
+        os.mkdir('feeds')
+
     for url, data in feeds.items():
         filename = feedfile(url)
         with open(filename, 'w') as f:
