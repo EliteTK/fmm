@@ -70,13 +70,27 @@ def init_feed(feed):
     print('Initialising feed at {}'.format(feed['url']))
     parsed = feedparser.parse(feed['url'])
 
+    if parsed.status != 200:
+        print('Error {}'.format(parsed.status))
+        return
+
     hashes = hashlist(parsed['items'])
 
-    if parsed.etag:
+    try:
+        etag = parsed.etag
+    except AttributeError:
+        etag = None
+
+    try:
+        modified = parsed.modified
+    except AttributeError:
+        modified = None
+
+    if etag:
         feed['state']['type'] = 'ETags'
         feed['state']['etag'] = parsed.etag
         feed['state']['sums'] = hashes
-    elif parsed.modified:
+    elif modified:
         feed['state']['type'] = 'Last-Modified'
         feed['state']['lm'] = parsed.modified
         feed['state']['sums'] = hashes
@@ -119,8 +133,8 @@ def etags_feed(feed):
 
     feed['state']['sums'].extend(hashlist(feed['data']['items']))
 
-def lm_feed(url, feedfile, users, feeds):
-    print('Polling Last-Modified feed at {}'.format(url))
+def lm_feed(feed):
+    print('Polling Last-Modified feed at {}'.format(feed['url']))
     feed['state']['type'] = 'Last-Modified'
 
     try:
@@ -143,11 +157,11 @@ def lm_feed(url, feedfile, users, feeds):
 
     feed['state']['sums'].extend(hashlist(feed['data']['items']))
 
-def diff_feed(feeds):
-    print('Polling Diff feed at {}'.format(url))
+def basic_feed(feed):
+    print('Polling Basic feed at {}'.format(feed['url']))
     feed['state']['type'] = 'Diff'
 
-    feed = feedparser.parse(url)
+    parsed = feedparser.parse(feed['url'])
 
     feed['data'] = {'channel': parsed['channel'], 'items': parsed['items']}
     remove_old_items(feed)
