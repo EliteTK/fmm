@@ -1,0 +1,12 @@
+This is a todo list for the project:
+ - Cleanup mail.py
+ - Set up configs to work with XDG
+ - Daemonize fmm so it can work as a systemd service
+    - Create a service file and install script / makefile
+ - Add more details to the environment passed to Jinja2
+ - Make global settings work more sanely
+ - Reorganise files so the naming makes a bit more sense
+ - General cleanup
+ - Error handling
+ - Logging
+ - Unit testing
