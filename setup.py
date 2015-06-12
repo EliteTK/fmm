@@ -104,12 +104,13 @@ def feed_settings():
             if k in cp['DEFAULT']:
                 default_config[k] = cp['DEFAULT'][k]
 
-    feedconf['DEFAULT'] = default_config
+    feedconf['DEFAULT'] = default_config.copy()
 
     for section in cp:
         if section == 'DEFAULT':
             continue
-        feed = default_config
+
+        feed = default_config.copy()
 
         for k, v in feed.items():
             if k in cp[section]:
