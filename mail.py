@@ -99,7 +99,8 @@ def send(feeds, _settings):
             continue
 
         for item in data['data']['items']:
-            content = render_content(data['data']['channel'], item, data['config']['template-name'])
+            content = render_content(gen_channel_tenv(data['data']['channel']),
+                    gen_item_tenv(item), data['config']['template-name'])
 
             subject = data['data']['channel']['title']
 
