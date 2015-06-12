@@ -115,6 +115,7 @@ def etags_feed(feed):
     except KeyError:
         feedetag = None
 
+
     parsed = feedparser.parse(feed['url'], etag=feedetag)
 
     if parsed.status == 304:
@@ -124,6 +125,9 @@ def etags_feed(feed):
     elif parsed.status != 200:
         print('Error {}'.format(parsed.status))
         return
+
+    if feedetag != parsed.etag:
+        print('ETags differ, expecting new feeds')
 
     feed['state']['etag'] = parsed.etag
 
@@ -148,6 +152,12 @@ def lm_feed(feed):
         print('No new items')
         feed['data'] = None
         return
+    elif parsed.status != 200:
+        print('Status {} returned.')
+        return
+
+    if last_modified != parsed.modified:
+        print('Last-Modified dates differ, expecting new feeds')
 
     feed['state']['lm'] = parsed.modified
 
@@ -159,7 +169,7 @@ def lm_feed(feed):
 
 def basic_feed(feed):
     print('Polling Basic feed at {}'.format(feed['url']))
-    feed['state']['type'] = 'Diff'
+    feed['state']['type'] = 'Basic'
 
     parsed = feedparser.parse(feed['url'])
 
