@@ -30,9 +30,9 @@ path = {
 }
 
 default_settings = {
-        'smtp-from': 'fmm@fmm.com',
+        'smtp-from': 'fmm@localhost',
         'smtp-host': 'localhost',
-        'smtp-port': 0,
+        'smtp-port': 25,
         'smtp-sec': 'NONE',
         'smtp-username': '',
         'smtp-password': '',
@@ -47,8 +47,8 @@ default_user_config = {
 
 default_feed_config = {
         'template-name': None,
-        'template-type': None,
-        'list-id': 'Feed Me Mail'
+        'template-type': 'html',
+        'list-id': 'FMM'
 }
 
 def load_feedlist(filename):

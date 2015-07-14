@@ -11,5 +11,12 @@ setup(name='fmm',
       packages=['fmm'],
       scripts=['bin/fmm'],
       package_data={'fmm': ['README.md']},
-      data_files=[('share/doc/fmm', ['README.md', 'LICENSE'])],
+      data_files=[('share/doc/fmm', ['README.md', 'LICENSE']),
+                  ('/etc/fmm', ['data/fmm.ini',
+                                'data/users.ini',
+                                'data/feedsettings.ini']),
+                  ('/usr/share/fmm/lists', ['data/default.feeds']),
+                  ('/usr/share/fmm/templates', ['data/default.html'])
+                  ],
+      requires=['slugify', 'xdg', 'feedparser', 'jinja2'],
       license='GPLv3')
