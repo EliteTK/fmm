@@ -114,6 +114,7 @@ def render_content(channel_tenv, item_tenv, template):
     return t.render(get_tenv(channel_tenv, item_tenv))
 
 def sendemails(emails):
+    print('Connecting to {}:{}'.format(settings['smtp-host'], settings['smtp-port']))
     if settings['smtp-sec'] == 'NONE' or settings['smtp-sec'] == '':
         s = smtplib.SMTP(settings['smtp-host'], settings['smtp-port'])
     elif settings['smtp-sec'] == 'STARTTLS':
@@ -133,6 +134,7 @@ def sendemails(emails):
     if len(settings['smtp-username']) > 0:
         s.login(settings['smtp-username'], settings['smtp-password'])
 
+    print('Sending emails')
     for n, email in enumerate(emails):
         print("Sending {}/{}: `{}' to {}".format(n + 1, len(emails),
                                                   email['Subject'],
@@ -142,7 +144,6 @@ def sendemails(emails):
     s.quit()
 
 def send(feeds, _settings):
-    print('Sending emails')
     global settings
     settings = _settings
     emails = list()
@@ -171,4 +172,5 @@ def send(feeds, _settings):
                 message['To'] = email
                 emails.append(message)
 
-    sendemails(emails)
+    if len(emails):
+        sendemails(emails)
