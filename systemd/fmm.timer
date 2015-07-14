@@ -1,0 +1,6 @@
+[Unit]
+Description=Run FMM every 10 minutes.
+After=network.target
+
+[Timer]
+OnUnitActiveSec=10m

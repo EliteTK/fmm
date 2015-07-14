@@ -1,0 +1,7 @@
+[Unit]
+Description=A simple Atom and RSS feed to email 'converter'
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/fmm
+User=fmm
