@@ -16,10 +16,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import os
+import os, time, smtplib
 from email.mime.text import MIMEText
 from jinja2 import FileSystemLoader, Environment
-import time
 
 feed_attrs = [
         'author',
@@ -106,6 +105,7 @@ def get_tenv(channel, item):
     return {'channel': channel, 'item': item, 'func': tfuncs}
 
 def render_content(channel_tenv, item_tenv, template):
+    template = os.path.join('/usr/share/fmm/templates', template)
     template_name = os.path.basename(template)
     template_dir = os.path.dirname(template)
     l = FileSystemLoader(template_dir)
@@ -113,14 +113,33 @@ def render_content(channel_tenv, item_tenv, template):
     t = e.get_template(template_name)
     return t.render(get_tenv(channel_tenv, item_tenv))
 
-def send_item(channel, item):
-    pass
+def sendemails(emails):
+    if settings['smtp-sec'] == 'NONE' or settings['smtp-sec'] == '':
+        s = smtplib.SMTP(settings['smtp-host'], settings['smtp-port'])
+    elif settings['smtp-sec'] == 'STARTTLS':
+        s = smtplib.SMTP(settings['smtp-host'], settings['smtp-port'])
+        s.starttls(settings['smtp-keyfile'], settings['smtp-certfile'])
+        s.ehlo() #Needed?
+    elif settings['smtp-sec'] == 'SSL/TLS':
+        s = smtplib.SMTP_SSL(settings['smtp-host'], settings['smtp-port'],
+                             keyfile=settings['smtp-keyfile'],
+                             certfile=settings['smtp-certfile'])
+    else:
+        print("Invalid smtp-sec setting: `{}'")
+        print("Allowed values are `NONE', `STARTTLS', `SSL/TLS'.")
+        print("(Default: `NONE')")
+        exit(1)
 
-def sendmail(content):
-    command = '{} {}'.format(settings['smtp-server'], settings['smtp-options'])
-    p = os.popen(command, 'w')
-    p.write(content)
-    p.close()
+    if len(settings['smtp-username']) > 0:
+        s.login(settings['smtp-username'], settings['smtp-password'])
+
+    for n, email in enumerate(emails):
+        print("Sending {}/{}: `{}' to {}".format(n + 1, len(emails),
+                                                  email['Subject'],
+                                                  email['To']))
+        s.send_message(email)
+
+    s.quit()
 
 def send(feeds, _settings):
     print('Sending emails')
@@ -150,7 +169,6 @@ def send(feeds, _settings):
                 message['From'] = settings['smtp-from']
 
                 message['To'] = email
-                emails.append(message.as_string())
+                emails.append(message)
 
-    for email in emails:
-        sendmail(email)
+    sendemails(emails)

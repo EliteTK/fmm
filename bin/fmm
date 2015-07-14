@@ -17,20 +17,19 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import mail
-import setup
-import feeds
+from fmm import mail, config, feeds
 
 if __name__ == "__main__":
     global settings
-    settings = setup.config()
+    settings = config.settings()
 
-    users = setup.users()
-    feedconf = setup.feed_settings()
-    subscriptions = setup.subscriptions(users)
-    feed_list = setup.feeds(users, subscriptions, feedconf)
+    users = config.users()
+    feedconf = config.feed_settings()
+    subscriptions = config.subscriptions(users)
+
+    feed_list = config.feeds(users, subscriptions, feedconf)
 
     feeds.grab(feed_list)
     mail.send(feed_list, settings)
 
-    setup.save_feed_states(feed_list)
+    config.save_feed_states(feed_list)
