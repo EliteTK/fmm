@@ -4,3 +4,6 @@ After=network.target
 
 [Timer]
 OnUnitActiveSec=10m
+
+[Install]
+WantedBy=multi-user.target
