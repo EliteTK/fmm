@@ -1,7 +1,6 @@
 This is a todo list for the project:
  - Don't assume everything but 200 and 304 is an error
  - Cleanup mail.py
- - Set up configs to work with XDG
  - Daemonize fmm so it can work as a systemd service
     - Create a service file and install script / makefile
  - Add more details to the environment passed to Jinja2
@@ -9,5 +8,4 @@ This is a todo list for the project:
  - Reorganise files so the naming makes a bit more sense
  - General cleanup
  - Error handling
- - Logging
  - Unit testing
