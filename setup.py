@@ -16,7 +16,9 @@ setup(name='fmm',
                                 'data/users.ini',
                                 'data/feedsettings.ini']),
                   ('/usr/share/fmm/lists', ['data/default.feeds']),
-                  ('/usr/share/fmm/templates', ['data/default.html'])
+                  ('/usr/share/fmm/templates', ['data/default.html']),
+                  ('/usr/lib/systemd/system', ['systemd/fmm.service',
+                                               'systemd/fmm.timer'])
                   ],
       requires=['slugify', 'xdg', 'feedparser', 'jinja2'],
       license='GPLv3')
