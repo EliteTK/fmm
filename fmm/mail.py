@@ -161,6 +161,8 @@ def send(feeds, _settings):
             if len(item['title']) > 0:
                 subject = '{} - {}'.format(subject, item['title'])
 
+            subject = ' '.join(subject.splitlines())
+
             for email, info in data['subscribers'].items():
                 message = MIMEText(content, data['config']['template-type'])
 
