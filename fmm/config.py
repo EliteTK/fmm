@@ -37,7 +37,8 @@ default_settings = {
         'smtp-username': '',
         'smtp-password': '',
         'smtp-keyfile': '',
-        'smtp-certfile': ''
+        'smtp-certfile': '',
+        'smtp-batch': 100,
 }
 
 default_user_config = {

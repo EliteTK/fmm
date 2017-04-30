@@ -76,15 +76,8 @@ def init_feed(feed):
 
     hashes = hashlist(parsed['items'])
 
-    try:
-        etag = parsed.etag
-    except AttributeError:
-        etag = None
-
-    try:
-        modified = parsed.modified
-    except AttributeError:
-        modified = None
+    etag = parsed.get('etag')
+    modified = parsed.get('modified')
 
     if etag:
         feed['state']['type'] = 'ETags'
@@ -126,8 +119,12 @@ def etags_feed(feed):
         print('Error {}'.format(parsed.status))
         return
 
-    if feedetag != parsed.etag:
-        print('ETags differ, expecting new feeds')
+    try:
+        if feedetag != parsed.etag:
+            print('ETags differ, expecting new feeds')
+    except AttributeError:
+        #TODO: do this better
+        return init_feed(feed)
 
     feed['state']['etag'] = parsed.etag
 

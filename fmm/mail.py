@@ -174,5 +174,11 @@ def send(feeds, _settings):
                 message['To'] = email
                 emails.append(message)
 
+    bsize = int(settings['smtp-batch'])
+    nbatches = ceil(len(emails) / bsize)
+
     if len(emails):
-        sendemails(emails)
+        for batch in range(nbatches):
+            print('Sending batch {}/{}'.format(batch + 1, nbatches))
+            offt = batch * bsize
+            sendemails(emails[offt:offt+bsize])
