@@ -158,7 +158,7 @@ def send(feeds, _settings):
 
             subject = data['data']['channel']['title']
 
-            if len(item['title']) > 0:
+            if item.get('title'):
                 subject = '{} - {}'.format(subject, item['title'])
 
             subject = ' '.join(subject.splitlines())
