@@ -150,7 +150,7 @@ def send(feeds, _settings):
     emails = list()
 
     for url, data in feeds.items():
-        if data['data'] is None or len(data['data']['items']) == 0:
+        if data.get('data') is None or len(data['data']['items']) == 0:
             continue
 
         for item in data['data']['items']:
