@@ -19,6 +19,7 @@
 import os, time, smtplib
 from email.mime.text import MIMEText
 from jinja2 import FileSystemLoader, Environment
+from math import ceil
 
 feed_attrs = [
         'author',
